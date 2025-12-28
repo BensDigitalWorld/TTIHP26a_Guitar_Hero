@@ -9,13 +9,14 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
 I want it to like a 8 bit version of guitare hero that can be played with a VGA screen and either btns that you connect yourselve or the snes controller
+(Explain how your project works)
 
 ## How to test
 
-Explain how to use your project
+
 play the game after connecting all
+(Explain how to use your project)
 
 ## External hardware
 
