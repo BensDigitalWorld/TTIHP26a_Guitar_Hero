@@ -128,7 +128,7 @@ module tt_um_BensDigitalWorld (
           tri_pattern_index <= 0;
           tri_dur_index <= 0;
           tri_pattern_cnt <= 0;
-          tri_freq_delta <= 0;
+
         
       end else begin
           // 1. HSYNC-Zähler (Zeilen zählen)
