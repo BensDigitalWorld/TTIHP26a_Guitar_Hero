@@ -109,7 +109,7 @@ module tt_um_BensDigitalWorld (
   reg [5:0]   tri_pattern_cnt = 0;
   reg [2:0]   tri_note_index;
   
-  wire [11:0] tri_freq_delta;
+  reg [11:0] tri_freq_delta;
   //wire [7:0]  eight_bit_audio;
   wire [7:0]  eight_bit_tri;
   wire [6:0]  tri_dur;
@@ -128,6 +128,7 @@ module tt_um_BensDigitalWorld (
           tri_pattern_index <= 0;
           tri_dur_index <= 0;
           tri_pattern_cnt <= 0;
+          tri_freq_delta <= 0;
         
       end else begin
           // 1. HSYNC-Zähler (Zeilen zählen)
