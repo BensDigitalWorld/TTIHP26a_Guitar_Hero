@@ -85,11 +85,25 @@ module tt_um_BensDigitalWorld (
 
 
 
-  phase_accumulator triangle_accumulator(
+  phase_accumulator tri_low(
+    .clk(clk),
+    .reset(~rst_n),
+    .freq_delta(tri_freq_delta  >> 1),
+    .triangle_out(tri_low)
+  );
+
+  phase_accumulator tri_mid(
     .clk(clk),
     .reset(~rst_n),
     .freq_delta(tri_freq_delta),
-    .triangle_out(eight_bit_tri)
+    .triangle_out(tri_mid)
+  );
+
+  phase_accumulator tri_high(
+    .clk(clk),
+    .reset(~rst_n),
+    .freq_delta(tri_freq_delta  << 1),
+    .triangle_out(tri_high)
   );
 
   myPWM pwm_audio(
@@ -99,6 +113,8 @@ module tt_um_BensDigitalWorld (
     .pwm(sound)
   );
 
+
+  assign eight_bit_tri = (tri_mid + tri_high + tri_low) / 3;
   
   reg [9:0]   hsync_cnt = 0;
   
@@ -112,6 +128,10 @@ module tt_um_BensDigitalWorld (
   reg [11:0] tri_freq_delta;
   //wire [7:0]  eight_bit_audio;
   wire [7:0]  eight_bit_tri;
+  wire [7:0]  tri_low;
+  wire [7:0]  tri_mid;
+  wire [7:0]  tri_high;
+  
   wire [6:0]  tri_dur;
   wire 	      tri_pattern_select; 
 
