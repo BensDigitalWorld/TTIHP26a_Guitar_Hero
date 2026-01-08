@@ -85,21 +85,21 @@ module tt_um_BensDigitalWorld (
 
 
 
-  phase_accumulator tri_low(
+  phase_accumulator acc_tri_low(
     .clk(clk),
     .reset(~rst_n),
     .freq_delta(tri_freq_delta  >> 1),
     .triangle_out(tri_low)
   );
 
-  phase_accumulator tri_mid(
+  phase_accumulator acc_tri_mid(
     .clk(clk),
     .reset(~rst_n),
     .freq_delta(tri_freq_delta),
     .triangle_out(tri_mid)
   );
 
-  phase_accumulator tri_high(
+  phase_accumulator acc_tri_high(
     .clk(clk),
     .reset(~rst_n),
     .freq_delta(tri_freq_delta  << 1),
