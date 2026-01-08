@@ -89,8 +89,8 @@ module tt_um_BensDigitalWorld (
   phase_accumulator acc_tri_mid(
     .clk(clk),
     .reset(~rst_n),
-    .freq_delta(eight_bit_tri),
-    .triangle_out(tri_mid)
+    .freq_delta(tri_freq_delta),
+    .triangle_out(eight_bit_tri)
   );
 
 
