@@ -85,26 +85,15 @@ module tt_um_BensDigitalWorld (
 
 
 
-  phase_accumulator acc_tri_low(
-    .clk(clk),
-    .reset(~rst_n),
-    .freq_delta(tri_freq_delta  >> 1),
-    .triangle_out(tri_low)
-  );
 
   phase_accumulator acc_tri_mid(
     .clk(clk),
     .reset(~rst_n),
-    .freq_delta(tri_freq_delta),
+    .freq_delta(eight_bit_tri),
     .triangle_out(tri_mid)
   );
 
-  phase_accumulator acc_tri_high(
-    .clk(clk),
-    .reset(~rst_n),
-    .freq_delta(tri_freq_delta  << 1),
-    .triangle_out(tri_high)
-  );
+
 
   myPWM pwm_audio(
     .clk(clk),
@@ -113,9 +102,6 @@ module tt_um_BensDigitalWorld (
     .pwm(sound)
   );
 
-
-  assign eight_bit_tri = (tri_mid + tri_high + tri_low) / 3;
-  
   reg [9:0]   hsync_cnt = 0;
   
   
@@ -128,9 +114,7 @@ module tt_um_BensDigitalWorld (
   reg [11:0] tri_freq_delta;
   //wire [7:0]  eight_bit_audio;
   wire [7:0]  eight_bit_tri;
-  wire [7:0]  tri_low;
-  wire [7:0]  tri_mid;
-  wire [7:0]  tri_high;
+
   
   wire [6:0]  tri_dur;
   wire 	      tri_pattern_select; 
@@ -211,26 +195,29 @@ module tt_um_BensDigitalWorld (
 endmodule
 
 
-
-
 module phase_accumulator (
     input wire clk,               // Systemtakt (z.B. 25,175 MHz)
     input wire reset,             // Globaler Reset
     input wire [11:0] freq_delta, // Der Wert aus deiner LUT
     output wire [7:0] triangle_out // Das fertige 8-Bit Audio-Signal
 );
-    reg [23:0] phase_acc;
-    // Triangle-Logik: Wir nutzen das Bit 23 als Richtungsanzeiger
-    wire top_bit = phase_acc[23];
-    //assign triangle_out = {8{top_bit}};
-    assign triangle_out = phase_acc[23] ? ~phase_acc[22:15] : phase_acc[22:15];
+
+    reg [24:0] phase_acc;
+    wire [7:0] tri_mid  = phase_acc[23] ? ~phase_acc[22:15] : phase_acc[22:15];
+    // Oktave höher (High): Nutzt Bits 22 bis 14 (schwingt doppelt so schnell)
+    wire [7:0] tri_high = phase_acc[22] ? ~phase_acc[21:14] : phase_acc[21:14];
+    // Oktave tiefer (Low): Nutzt Bits 24 bis 16 (schwingt halb so schnell)
+    wire [7:0] tri_low  = phase_acc[24] ? ~phase_acc[23:16] : phase_acc[23:16];
+    
+    assign triangle_out = (tri_mid >> 1) + (tri_high >> 2) + (tri_low >> 2);
+
     always @(posedge clk) begin
         if (reset) begin
-            phase_acc <= 24'd0;
+            phase_acc <= 25'd0;
         end else begin
             // Prüfen, ob eine neue Note beginnt (freq_delta hat sich geändert)
                 // Normales Aufsummieren
-          phase_acc <= phase_acc + {12'b0, freq_delta};
+          phase_acc <= phase_acc + {13'b0, freq_delta};
         end
     end
 endmodule
