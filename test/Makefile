@@ -1,12 +1,17 @@
 # Makefile
 # See https://docs.cocotb.org/en/stable/quickstart.html for more info
 
-# defaults
-SIM ?= icarus
+# defaults # icarus or verilator?
+SIM ?= icarus 
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = tt_um_BensDigitalWorld.v hvsync_generator.v gamepad_pmod.v
+PROJECT_SOURCES = tt_um_BensDigitalWorld.sv 
+                  hvsync_generator.v 
+                  gamepad_pmod.v
+                  tri_gen.sv
+                  tri_phase_accumulator.sv
+                  pdm_dac.sv
 
 ifneq ($(GATES),yes)
 
@@ -14,6 +19,8 @@ ifneq ($(GATES),yes)
 SIM_BUILD				= sim_build/rtl
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 
+#added meselfe
+COMPILE_ARGS += -g2012
 else
 
 # Gate level simulation:
@@ -21,6 +28,8 @@ SIM_BUILD				= sim_build/gl
 COMPILE_ARGS    += -DGL_TEST
 COMPILE_ARGS    += -DFUNCTIONAL
 COMPILE_ARGS    += -DSIM
+#added meselfe
+COMPILE_ARGS += -g2012
 VERILOG_SOURCES += $(PDK_ROOT)/ihp-sg13g2/libs.ref/sg13g2_io/verilog/sg13g2_io.v
 VERILOG_SOURCES += $(PDK_ROOT)/ihp-sg13g2/libs.ref/sg13g2_stdcell/verilog/sg13g2_stdcell.v
 
