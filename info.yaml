@@ -4,7 +4,7 @@ project:
   author:       "Benjamin Loeliger"      # Your name
   discord:      "ben_be_jam"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "8 Bit Version of Guitar Hero Game with many Songs"      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
+  language:     "SystemVerilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     25175000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
@@ -17,9 +17,12 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "tt_um_BensDigitalWorld.v"
+    - "tt_um_BensDigitalWorld.sv"
     - "hvsync_generator.v"
     - "gamepad_pmod.v"
+    - "tri_gen.sv"
+    - "pdm_dac.sv"
+    - "tri_phase_accumulator.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
